@@ -16,13 +16,13 @@ from .models import Post, Comment, Mensaje
 
 # GET
 class PostList(generics.ListAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.public.all()
     serializer_class = ListPostSerializer
     # permission_classes = [permissions.AllowAny]
 
 class LatestPost(generics.ListAPIView):
 
-    queryset = Post.latest.all()[:3]
+    queryset = Post.public.all()[:3]
     serializer_class = ListPostSerializer
     # permission_classes = [permissions.AllowAny]
     

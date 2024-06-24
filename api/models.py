@@ -14,10 +14,10 @@ class Topic(models.Model):
         verbose_name="Tema"
         verbose_name_plural = "Temas"
 
-class PostLatestManager(models.Manager):
+class PostPublishedManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().order_by("-updated")
-    # filter(is_public=True)
+        return super().get_queryset().filter(is_public=True)
+    # 
 
     
 
@@ -36,7 +36,7 @@ class Post(models.Model):
     topics = models.ManyToManyField(Topic,verbose_name="temas", related_name="posts")
 
     objects = models.Manager()
-    latest = PostLatestManager()
+    public = PostPublishedManager()
 
     @property
     def short_body(self):
