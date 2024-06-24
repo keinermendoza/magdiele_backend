@@ -1,9 +1,9 @@
 from django.db import models
-from django.conf import settings
-from django.urls import reverse
+# from django.conf import User.urls import reverse
 from django.utils.text import slugify
 from django.utils.text import Truncator
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 class Topic(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=100)
 
@@ -22,9 +22,7 @@ class PostLatestManager(models.Manager):
     
 
 class Post(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE,
-                                  related_name='post')
+    author = models.ForeignKey(User,on_delete=models.CASCADE, related_name='post')
     
     title = models.CharField(verbose_name="Titulo", max_length=100)
     slug = models.SlugField(verbose_name="Fragmento", max_length=150, unique=True)
@@ -66,12 +64,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE,
-                                  related_name='comments')
-    
-    post = models.ForeignKey(Post, on_delete=models.CASCADE,
-                             related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -94,7 +88,7 @@ class Mensaje(models.Model):
     pregunta = models.TextField(blank=True, null=True)
     fecha = models.DateTimeField(auto_now_add=True)
     visto = models.BooleanField(default=False)
-    
+
 
     def __str__(self) -> str:
         return f"{self.nombre} ha enviado un mensaje"
